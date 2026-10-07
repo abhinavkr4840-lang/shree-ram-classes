@@ -49,3 +49,63 @@ function escapeHtml(s){
   return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 }
 renderMaterials();
+
+/* ===== Three-finger swipe down: जय श्री राम + dark/light toggle (touch devices only) ===== */
+(function(){
+  if(!('ontouchstart' in window)) return;
+  const body = document.body;
+  try{ if(localStorage.getItem('theme')==='dark') body.classList.add('dark'); }catch(e){}
+
+  const ov = document.createElement('div');
+  ov.id = 'ramOverlay';
+  ov.innerHTML = '<span>जय श्री राम</span>';
+  body.appendChild(ov);
+  const txt = ov.firstChild;
+
+  const DIST = 160;      // pixels of swipe for full effect
+  const TRIGGER = 0.6;   // how far (0-1) you must swipe for the switch to happen
+  let active = false, startY = 0, progress = 0;
+
+  const avgY = t => (t[0].clientY + t[1].clientY + t[2].clientY) / 3;
+  const show = p => {
+    ov.style.opacity = p;
+    txt.style.opacity = p;
+    txt.style.transform = 'scale(' + (0.9 + 0.1 * p) + ')';
+  };
+
+  document.addEventListener('touchstart', e => {
+    if(e.touches.length === 3){
+      active = true; progress = 0; startY = avgY(e.touches);
+      ov.classList.toggle('to-light', body.classList.contains('dark'));
+      ov.style.transition = 'none'; txt.style.transition = 'none';
+      show(0);
+    } else if(e.touches.length > 3){
+      active = false; ov.style.opacity = 0;
+    }
+  }, {passive:true});
+
+  document.addEventListener('touchmove', e => {
+    if(!active || e.touches.length !== 3) return;
+    e.preventDefault();
+    progress = Math.min(1, Math.max(0, (avgY(e.touches) - startY) / DIST));
+    show(progress);
+  }, {passive:false});
+
+  function finish(){
+    if(!active) return;
+    active = false;
+    ov.style.transition = 'opacity .4s'; txt.style.transition = 'opacity .4s, transform .4s';
+    if(progress >= TRIGGER){
+      show(1);
+      setTimeout(() => {
+        const dark = body.classList.toggle('dark');
+        try{ localStorage.setItem('theme', dark ? 'dark' : 'light'); }catch(e){}
+      }, 400);
+      setTimeout(() => { ov.style.transition = 'opacity .7s'; show(0); }, 1300);
+    } else {
+      show(0);
+    }
+  }
+  document.addEventListener('touchend', finish);
+  document.addEventListener('touchcancel', finish);
+})();

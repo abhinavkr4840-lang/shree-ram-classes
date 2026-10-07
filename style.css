@@ -79,3 +79,30 @@ footer strong{display:block;font-size:18px}footer p{color:#b9c9d8;font-size:11px
   .material-list{grid-template-columns:1fr 1fr}.upload-form{grid-template-columns:1fr 1fr}.upload-form input[type=file]{grid-column:span 2}.upload-form .primary-btn{grid-column:span 2}
   .admin-section{margin:10px 28px 40px}.filters{max-width:500px}
 }
+
+/* ===== Dark mode (toggled by three-finger swipe down) ===== */
+body,.topbar,.quick-card,.material,.notice,.table-wrap,select,input,footer{transition:background-color .4s,color .4s,border-color .4s}
+body.dark{background:#0b1220;color:#e6edf5}
+.dark .topbar{background:rgba(11,18,32,.94)}
+.dark .brand h1,.dark .section h2{color:var(--gold-light)}
+.dark .brand p,.dark .material-main small,.dark .quick-card small,.dark .notice p,.dark .admin-intro,.dark .empty{color:#97a6b8}
+.dark #mobileNav{background:#101a2b;border-color:#1f2c3f}
+.dark #mobileNav a:active{background:#1a2840}
+.dark .quick-card,.dark .material,.dark .notice,.dark .table-wrap{background:#121c2d;border-color:#1f2c3f;box-shadow:none}
+.dark .material-icon{background:#1a2840}
+.dark .pill{background:#1a2840;color:#9cc6ee}
+.dark .pill.gold{background:#3a2d0f;color:var(--gold-light)}
+.dark select,.dark input{background:#121c2d;border-color:#26364d;color:#e6edf5}
+.dark .notice-date{background:#3a2d0f;color:var(--gold-light)}
+.dark th{background:#16233a;color:#9cc6ee}
+.dark th,.dark td{border-color:#1f2c3f}
+.dark .download,.dark .menu-btn{background:var(--blue)}
+.dark .upload-message{background:#12301b;color:#9be0ab}
+.dark .admin-section{border-color:#1f2c3f}
+.dark footer{background:#060b14}
+
+/* ===== जय श्री राम overlay ===== */
+#ramOverlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;background:#05080f}
+#ramOverlay span{font-size:clamp(40px,14vw,90px);font-weight:800;color:var(--gold-light);text-shadow:0 0 18px rgba(243,213,138,.7),0 0 42px rgba(242,138,23,.55);text-align:center;line-height:1.2;padding:0 16px}
+#ramOverlay.to-light{background:var(--cream)}
+#ramOverlay.to-light span{color:var(--saffron);text-shadow:0 0 18px rgba(242,138,23,.45),0 0 40px rgba(201,154,46,.4)}
