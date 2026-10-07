@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>श्री राम Classes | Academic Excellence</title>
+  <meta name="description" content="श्री राम Classes - Study material, question papers, notices and timetable.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="logo.jpg" alt="श्री राम Classes logo">
+      <div>
+        <h1>श्री राम Classes</h1>
+        <p>Path to Academic Excellence</p>
+      </div>
+    </div>
+    <button class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
+  </header>
+
+  <nav id="mobileNav">
+    <a href="#home">Home</a>
+    <a href="#materials">Study Material</a>
+    <a href="#updates">Notices</a>
+    <a href="#admin">Admin</a>
+  </nav>
+
+  <main id="home">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">WELCOME TO</span>
+        <h2>श्री राम <span>Classes</span></h2>
+        <p>Learn. Practice. Improve. Achieve.</p>
+        <a class="primary-btn" href="#materials">Explore Study Material</a>
+      </div>
+      <img class="hero-logo" src="logo.jpg" alt="श्री राम Classes">
+    </section>
+
+    <section class="quick-grid" aria-label="Quick access">
+      <a href="#materials" class="quick-card">
+        <div class="icon">📚</div><strong>Study Material</strong><small>Notes & resources</small>
+      </a>
+      <a href="#materials" class="quick-card">
+        <div class="icon">📝</div><strong>Question Papers</strong><small>Practice & tests</small>
+      </a>
+      <a href="#updates" class="quick-card">
+        <div class="icon">📢</div><strong>Notices</strong><small>Latest updates</small>
+      </a>
+    </section>
+
+    <section id="materials" class="section">
+      <div class="section-head">
+        <div><span class="eyebrow">LEARNING HUB</span><h2>Study Material</h2></div>
+        <span class="pill">Student Area</span>
+      </div>
+
+      <div class="filters">
+        <select id="classFilter" onchange="filterMaterials()">
+          <option value="all">All Classes</option>
+          <option value="8">Class 8</option>
+          <option value="9">Class 9</option>
+          <option value="10">Class 10</option>
+          <option value="11">Class 11</option>
+          <option value="12">Class 12</option>
+        </select>
+        <select id="typeFilter" onchange="filterMaterials()">
+          <option value="all">All Materials</option>
+          <option value="notes">Notes</option>
+          <option value="papers">Question Papers</option>
+        </select>
+      </div>
+
+      <div id="materialList" class="material-list"></div>
+      <p id="emptyState" class="empty" hidden>No material matches these filters.</p>
+    </section>
+
+    <section id="updates" class="section">
+      <div class="section-head">
+        <div><span class="eyebrow">KEEP UPDATED</span><h2>Latest Notices</h2></div>
+      </div>
+      <div class="notice">
+        <div class="notice-date"><b>07</b><span>OCT</span></div>
+        <div><strong>Welcome to the new student portal</strong><p>Study material and question papers will be added here.</p></div>
+      </div>
+      <div class="notice">
+        <div class="notice-date"><b>—</b><span>NEW</span></div>
+        <div><strong>Check this page regularly</strong><p>Important class announcements can be published in this section.</p></div>
+      </div>
+    </section>
+
+    <section id="admin" class="section admin-section">
+      <div class="section-head">
+        <div><span class="eyebrow">TEACHER PANEL</span><h2>Upload Material</h2></div>
+        <span class="pill gold">Admin</span>
+      </div>
+      <p class="admin-intro">This first version includes a browser-only upload demo. Files are not yet stored online.</p>
+      <form id="uploadForm" class="upload-form">
+        <input id="title" type="text" placeholder="Material title" required>
+        <select id="uploadClass" required>
+          <option value="">Select class</option>
+          <option value="8">Class 8</option><option value="9">Class 9</option>
+          <option value="10">Class 10</option><option value="11">Class 11</option>
+          <option value="12">Class 12</option>
+        </select>
+        <select id="subject" required>
+          <option value="">Select subject</option>
+          <option>Physics</option><option>Chemistry</option><option>Mathematics</option>
+          <option>Biology</option><option>English</option><option>Computer Science</option>
+        </select>
+        <select id="uploadType" required>
+          <option value="">Material type</option>
+          <option value="notes">Notes</option>
+          <option value="papers">Question Paper</option>
+        </select>
+        <input id="file" type="file" accept=".pdf,.doc,.docx" required>
+        <button class="primary-btn" type="submit">Publish Material</button>
+      </form>
+      <div id="uploadMessage" class="upload-message" hidden></div>
+    </section>
+  </main>
+
+  <footer>
+    <img src="logo.jpg" alt="" class="footer-logo">
+    <strong>श्री राम Classes</strong>
+    <p>Path to Academic Excellence</p>
+    <small>© 2026 श्री राम Classes. All rights reserved.</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
