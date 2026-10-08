@@ -1,4 +1,4 @@
-const GEMINI_API_KEY = "PASTE_YOUR_GEMINI_KEY_HERE";
+const GEMINI_API_KEY = "AQ.Ab8RN6J9DqeQWhoq3wv0-veCYRY1YIgU2DTMYPsQYykQg-pTJg";
 const GEMINI_MODEL = "gemini-2.5-flash";
 const SYSTEM_PROMPT = `You are "राम दूत AI", a friendly doubt-solving tutor for students of Shree Ram Classes (Classes 8 to 12: Physics, Chemistry, Mathematics, Biology, English, Computer Science).
 - Reply in the same language the student uses (English, Hindi or Hinglish).
