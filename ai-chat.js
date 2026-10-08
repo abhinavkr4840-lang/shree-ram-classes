@@ -1,5 +1,5 @@
 const GROQ_API_KEY = "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";
-const AI_MODEL = "llama-3.3-70b-versatile";
+const AI_MODEL = "openai/gpt-oss-120b";
 const SYSTEM_PROMPT = `You are "राम दूत AI", a friendly doubt-solving tutor for students of Shree Ram Classes (Classes 8 to 12: Physics, Chemistry, Mathematics, Biology, English, Computer Science).
 - Reply in the same language the student uses (English, Hindi or Hinglish).
 - Explain step by step in simple words, with a short example when helpful.
