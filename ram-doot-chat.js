@@ -65,12 +65,12 @@ const SYSTEM_PROMPT = `You are "राम दूत AI", a friendly doubt-solvin
       <button type="button" data-a="gallery">🖼️ Picture</button>
       <button type="button" data-a="camera">📷 Camera</button>
       <button type="button" data-a="file">📎 File (PDF / TXT)</button>
-      <button type="button" data-a="lang">🌐 Voice: English</button>
+      <button type="button" data-a="lang">🗣 Voice: English</button>
     </div>
     <form class="ai-form" id="aiForm">
       <button type="button" class="ai-ic" id="aiPlus" aria-label="Attach">＋</button>
       <input id="aiInput" type="text" placeholder="Type, speak or attach your doubt..." autocomplete="off">
-      <button type="button" class="ai-ic" id="aiMic" aria-label="Speak">🎤</button>
+      <button type="button" class="ai-ic" id="aiMic" aria-label="Speak">🎙</button>
       <button type="submit">Send</button>
     </form>
     <input id="aiGallery" type="file" accept="image/*" multiple style="display:none">
