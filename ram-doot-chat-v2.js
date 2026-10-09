@@ -1,4 +1,4 @@
-const GROQ_API_KEY = "PASTE_YOUR_GROQ_KEY_HERE";  // used directly until you set up Vercel/Netlify
+const GROQ_API_KEY = "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";  // used directly until you set up Vercel/Netlify
 const AI_WORKER_URL = "";                           // later set to "/api/ai" (then the key above can be deleted)
 const TEXT_MODEL = "openai/gpt-oss-120b";           // text-only doubts
 const VISION_MODEL = "qwen/qwen3.8-27b";            // photos and scanned PDFs
@@ -101,7 +101,7 @@ const SYSTEM_PROMPT = `You are "राम दूत AI", a friendly doubt-solvin
     <form class="ai-form" id="aiForm">
       <button type="button" class="ai-ic" id="aiPlus" aria-label="Attach">＋</button>
       <input id="aiInput" type="text" placeholder="Ask your doubt…" autocomplete="off">
-      <button type="button" class="ai-ic" id="aiMic" aria-label="Speak">🎤</button>
+      <button type="button" class="ai-ic" id="aiMic" aria-label="Speak">🎙</button>
       <button type="submit" class="ai-send" id="aiSend" aria-label="Send">➤</button>
     </form>
     <input id="aiGallery" type="file" accept="image/*" multiple style="display:none">
