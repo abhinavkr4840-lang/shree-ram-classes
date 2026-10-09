@@ -1,4 +1,4 @@
-const GROQ_API_KEY = "PASTE_YOUR_GROQ_KEY_HERE";  // used directly until you set up Vercel/Netlify
+const GROQ_API_KEY = "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";  // used directly until you set up Vercel/Netlify
 const AI_WORKER_URL = "";                           // later set to "/api/ai" (then the key above can be deleted)
 const TEXT_MODEL = "openai/gpt-oss-120b";           // text-only doubts
 const VISION_MODEL = "qwen/qwen3.8-27b";            // photos and scanned PDFs
