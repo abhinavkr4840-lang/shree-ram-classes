@@ -1,6 +1,6 @@
-const SUPABASE_URL = "PASTE_PROJECT_URL_HERE";
-const SUPABASE_KEY = "PASTE_PUBLISHABLE_KEY_HERE";
-const TEACHER_EMAIL = "PASTE_TEACHER_EMAIL_HERE"; // hidden login email, teachers only type the password
+ const SUPABASE_URL = "https://mdzkkwulueyfgbztrfvy.supabase.co";
+const SUPABASE_KEY = "sb_publishable_DJk3GmH-UzCgBujUKVRmTw_FRczeeTZ";
+const TEACHER_EMAIL = "shreeram@gmail.com"; // hidden login email, teachers only type the password
 
 /* Live notes: everyone can view, only the logged-in teacher can upload/delete */
 (function(){
