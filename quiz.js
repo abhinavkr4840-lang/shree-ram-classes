@@ -150,7 +150,7 @@
 
   function render(){
     const body = tab === 'board' ? boardHTML() : ({profile:profileHTML, subjects:subjectsHTML, loading:loadingHTML, question:questionHTML, result:resultHTML}[view] || subjectsHTML)();
-    sheet.innerHTML = `<div class="dq-in"><div class="dq-top"><b>🔥 Daily Quiz</b><button data-a="close" aria-label="Close">✕</button></div>
+    sheet.innerHTML = `<div class="dq-in"><div class="dq-top"><b>🕉 VEDAX PRIME</b><button data-a="close" aria-label="Close">✕</button></div>
       <div class="dq-tabs"><button data-a="tab-quiz" class="${tab === 'quiz' ? 'on' : ''}">📝 Quiz</button><button data-a="tab-board" class="${tab === 'board' ? 'on' : ''}">🏆 Top streaks</button></div>
       <div class="dq-body">${body}</div></div>`;
     const b = sheet.querySelector('.dq-body'); if(b && view === 'question' && picked < 0) b.scrollTop = 0;
