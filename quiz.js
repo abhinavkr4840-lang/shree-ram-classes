@@ -2,7 +2,7 @@
    Needs notes-upload.js (Supabase) and the AI chat file (ram-doot-chat-v2.js) loaded BEFORE it. */
 (function(){
   const GOAL = 10;
-  const LOGO = 'vedax-prime-logo.png';
+  const LOGO = 'vedax-prime-logo-1.png';
   const css = `
   .dq,#dqSheet{--vx-navy:#0B1F4B;--vx-navy2:#16358A;--vx-gold:#FFB800;--vx-gold2:#FFD45C;--vx-cyan:#22C3F2;--vx-cream:#FBF7EC;--vx-ok:#2BC16B;--vx-bad:#F25B5B;font-family:'Nunito','Noto Sans Devanagari',system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
   .vx-av{flex:0 0 auto;width:var(--s,44px);height:var(--s,44px);border-radius:50%;overflow:hidden;display:inline-grid;place-items:center;background:var(--vx-cream);border:3px solid var(--vx-gold);font-size:calc(var(--s,44px) * .5)}
