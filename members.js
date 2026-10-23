@@ -65,7 +65,11 @@
   const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const session = () => { try{ const s = JSON.parse(localStorage.getItem('teacherSession') || 'null'); return s && Date.now() < s.expires_at ? s : null; }catch(e){ return null; } };
   const joinedRecently = () => { try{ return Date.now() - Number(localStorage.getItem('mbJoined') || 0) < 864e5; }catch(e){ return false; } };
-  const mapRow = x => ({id:x.id, name:x.name, cls:String(x.cls), photo:x.photo_url, path:x.photo_path, created:x.created_at});
+  const mapRow = x => ({id:x.id, name:x.name, cls:String(x.cls), photo:x.photo_url, path:x.photo_path, created:x.created_at,
+    nickname:x.nickname || '', bio:x.bio || '', pronouns:x.pronouns || '', bannerUrl:x.banner_url || '', bannerPath:x.banner_path || '', bannerColor:x.banner_color || '', claimed:!!x.claimed});
+  const newToken = () => { const a = new Uint8Array(16); (window.crypto || window.msCrypto).getRandomValues(a); return Array.prototype.map.call(a, b => ('0' + b.toString(16)).slice(-2)).join(''); };
+  const saveKey = (id, tok) => { try{ const m = JSON.parse(localStorage.getItem('mbKeys') || '{}'); m[id] = tok; localStorage.setItem('mbKeys', JSON.stringify(m)); }catch(e){} };
+  const JOIN_ERR = {slow_down:'Many people are joining right now. Please try again in a few minutes.', bad_input:'Please check your name and class.', bad_photo:'That photo could not be used. Try another one.', bad_token:'Something went wrong. Please try again.'};
 
   let sec, items = [], byId = {}, total = 0, monthN = 0, loaded = false, teacherOn = false, formOpen = false, timer;
   const all = {open:false, rows:[], q:'', cls:'all', offset:0, count:0, busy:false};
@@ -88,10 +92,14 @@
     if(before) before.parentNode.insertBefore(sec, before); else document.body.appendChild(sec);
     sec.addEventListener('click', e => {
       const d = e.target.closest('[data-del]'); if(d){ del(d.dataset.del); return; }
+      const pc = e.target.closest('[data-mid]'); if(pc && window.Profiles){ window.Profiles.open(pc.dataset.mid); return; }
       if(e.target.closest('#mbOpen')){ formOpen = !formOpen; drawJoin(); return; }
       if(e.target.closest('#mbAllBtn')){ all.open = !all.open; drawAllBox(); if(all.open) loadAll(true); return; }
       const c = e.target.closest('[data-cls]'); if(c){ all.cls = c.dataset.cls; loadAll(true); return; }
       if(e.target.closest('#mbMore')) loadAll(false);
+    });
+    sec.addEventListener('keydown', e => {
+      if((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[data-mid]') && window.Profiles){ e.preventDefault(); window.Profiles.open(e.target.dataset.mid); }
     });
     sec.addEventListener('input', e => {
       if(e.target.id !== 'mbSearch') return;
@@ -127,12 +135,13 @@
   function cardHTML(m, i){
     const date = new Date(m.created).toLocaleDateString('en-IN', {day:'numeric', month:'short'});
     const isNew = Date.now() - new Date(m.created).getTime() < 14 * 864e5;
-    const av = m.photo ? '<img src="' + esc(m.photo) + '" alt="" loading="lazy">' : esc((m.name.trim()[0] || '?').toUpperCase());
-    return `<div class="mb-card" style="animation-delay:${Math.min(i, 8) * 0.06}s">
+    const av = m.photo ? '<img src="' + esc(m.photo) + '" alt="" loading="lazy">' : esc(((m.nickname || m.name).trim()[0] || '?').toUpperCase());
+    const shown = m.nickname || m.name;
+    return `<div class="mb-card" data-mid="${esc(m.id)}" role="button" tabindex="0" aria-label="Open ${esc(shown)}'s profile" style="animation-delay:${Math.min(i, 8) * 0.06}s;cursor:pointer">
       ${teacherOn ? '<button class="mb-del" type="button" data-del="' + m.id + '" aria-label="Remove">🗑</button>' : ''}
       ${isNew ? '<span class="mb-new">NEW</span>' : ''}
       <div class="mb-av"><div class="mb-in">${av}</div></div>
-      <div class="mb-name">${esc(m.name)}</div>
+      <div class="mb-name">${esc(shown)}</div>
       <span class="mb-cls">Class ${esc(m.cls)}</span>
       <small class="mb-date">Joined ${date}</small></div>`;
   }
@@ -174,9 +183,13 @@
     drawAll();
     const q = all.q.replace(/[^\p{L}\p{N} .'-]/gu, '').trim();
     let p = 'select=*&order=created_at.desc&limit=' + PAGE + '&offset=' + all.offset;
-    if(q) p += '&name=ilike.' + encodeURIComponent('*' + q + '*');
     if(all.cls !== 'all') p += '&cls=eq.' + all.cls;
-    try{ const r = await query(p); all.rows = all.rows.concat(r.rows); all.offset += r.rows.length; all.count = r.count; }catch(e){}
+    const nameOnly = q ? p + '&name=ilike.' + encodeURIComponent('*' + q + '*') : p;
+    const both = q ? p + '&or=' + encodeURIComponent('(name.ilike.*' + q + '*,nickname.ilike.*' + q + '*)') : p;
+    try{
+      let r; try{ r = await query(both); }catch(e1){ r = await query(nameOnly); }   // falls back if the profile columns are not added yet
+      all.rows = all.rows.concat(r.rows); all.offset += r.rows.length; all.count = r.count;
+    }catch(e){}
     all.busy = false; drawAll();
   }
 
@@ -217,13 +230,18 @@
     try{
       let photo_url = null, photo_path = null;
       if(file){
-        photo_path = 'p-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8) + '.jpg';
+        photo_path = 'p-' + Date.now() + '-' + (Math.random().toString(36) + '000000').slice(2, 8) + '.jpg';
         const up = await fetch(SUPABASE_URL + '/storage/v1/object/member-photos/' + photo_path, {method:'POST', headers:{apikey:SUPABASE_KEY, 'Content-Type':'image/jpeg'}, body:await cropSquare(file)});
         if(!up.ok) throw new Error('Photo upload failed (' + up.status + ')');
         photo_url = SUPABASE_URL + '/storage/v1/object/public/member-photos/' + photo_path;
       }
-      const r = await fetch(SUPABASE_URL + '/rest/v1/members', {method:'POST', headers:{apikey:SUPABASE_KEY, 'Content-Type':'application/json', Prefer:'return=minimal'}, body:JSON.stringify({name, cls, photo_url, photo_path})});
-      if(!r.ok) throw new Error('Could not join (' + r.status + ')');
+      const tok = newToken();
+      const jr = await fetch(SUPABASE_URL + '/rest/v1/rpc/member_join', {method:'POST', headers:{apikey:SUPABASE_KEY, 'Content-Type':'application/json'}, body:JSON.stringify({p_name:name, p_cls:cls, p_photo_url:photo_url, p_photo_path:photo_path, p_token:tok})});
+      if(jr.ok){ const nid = await jr.json(); saveKey(nid, tok); }
+      else if(jr.status === 404){   // profile system not installed yet: old behaviour
+        const r = await fetch(SUPABASE_URL + '/rest/v1/members', {method:'POST', headers:{apikey:SUPABASE_KEY, 'Content-Type':'application/json', Prefer:'return=minimal'}, body:JSON.stringify({name, cls, photo_url, photo_path})});
+        if(!r.ok) throw new Error('Could not join (' + r.status + ')');
+      } else { const ed = await jr.json().catch(() => null); throw new Error(JOIN_ERR[ed && ed.message] || 'Could not join (' + jr.status + ')'); }
       try{ localStorage.setItem('mbJoined', String(Date.now())); localStorage.setItem('mbName', name); localStorage.setItem('mbCls', cls); }catch(e){}
       formOpen = false; drawJoin();
       sec.querySelector('#mbJoinBox').insertAdjacentHTML('afterbegin', '<span class="mb-done">🎉 स्वागत है, ' + esc(name) + '! आप श्री राम परिवार का हिस्सा बन गए। 🙏</span>');
@@ -246,6 +264,11 @@
     }catch(e){ alert(e.message); }
   }
 
+  window.MembersAPI = {
+    get: id => byId[id] || null,
+    put: row => { const m = mapRow(row); byId[m.id] = m; [items, all.rows].forEach(list => { const i = list.findIndex(x => String(x.id) === String(m.id)); if(i >= 0) list[i] = m; }); draw(); drawAll(); return m; },
+    mapRow, reload: () => load(), teacher: () => teacherOn, session
+  };
   function init(){
     build(); teacherOn = !!session(); drawJoin(); draw(); load();
     setInterval(() => { const t = !!session(); if(t !== teacherOn){ teacherOn = t; draw(); drawAll(); } }, 1500);
