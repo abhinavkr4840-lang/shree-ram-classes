@@ -27,7 +27,7 @@
   const H = (extra) => Object.assign({apikey:SUPABASE_KEY, 'Content-Type':'application/json'}, extra || {});
 
   const css = `
-  .pf-ov{position:fixed;inset:0;z-index:9500;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(4,10,20,.66);backdrop-filter:blur(3px);animation:pfFade .18s ease both}
+  .pf-ov{position:fixed;inset:0;z-index:9990;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(4,10,20,.66);backdrop-filter:blur(3px);animation:pfFade .18s ease both}
   @keyframes pfFade{from{opacity:0}to{opacity:1}} @keyframes pfPop{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
   .pf-card{position:relative;width:100%;max-width:440px;max-height:calc(100dvh - 28px);overflow-y:auto;overscroll-behavior:contain;border-radius:22px;background:var(--card,#fff);color:var(--ink,#10243a);box-shadow:0 24px 60px rgba(0,0,0,.45);animation:pfPop .22s ease both}
   .pf-x{position:absolute;top:10px;right:10px;z-index:5;width:36px;height:36px;border:0;border-radius:50%;cursor:pointer;font-size:17px;line-height:1;background:rgba(0,0,0,.42);color:#fff}
